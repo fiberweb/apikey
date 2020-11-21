@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 )
 
 const (
@@ -50,7 +50,7 @@ var defaultConfig = Config{
 }
 
 // New returns the middleware function
-func New(config ...Config) func(*fiber.Ctx) {
+func New(config ...Config) fiber.Handler {
 	var cfg Config
 
 	if len(config) == 0 {
@@ -62,16 +62,14 @@ func New(config ...Config) func(*fiber.Ctx) {
 		}
 	}
 
-	return func(c *fiber.Ctx) {
+	return func(c *fiber.Ctx) error {
 		if cfg.Skip != nil && cfg.Skip(c) {
-			c.Next()
-			return
+			return c.Next()
 		}
 		pass := cfg.ValidatorFunc(c, cfg)
 		if !pass {
-			c.SendStatus(http.StatusUnauthorized)
-			return
+			return c.SendStatus(http.StatusUnauthorized)
 		}
-		c.Next()
+		return c.Next()
 	}
 }
