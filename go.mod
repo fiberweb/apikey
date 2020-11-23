@@ -1,5 +1,5 @@
-module github.com/fiberweb/apikey
+module github.com/fiberweb/apikey/v2
 
-require github.com/gofiber/fiber v1.8.32
+require github.com/gofiber/fiber/v2 v2.2.0
 
-go 1.11
+go 1.14

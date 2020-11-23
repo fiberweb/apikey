@@ -4,15 +4,15 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 )
 
 func Test_Skip(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/?key=secret", nil)
 	app := fiber.New()
 	app.Use(New(Config{Key: "secret", Skip: func(c *fiber.Ctx) bool { return true }}))
-	app.Get("/", func(c *fiber.Ctx) {
-		c.Send("ok")
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("ok")
 	})
 	resp, _ := app.Test(req)
 
@@ -25,8 +25,8 @@ func Test_MissingKeyInRequest(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/", nil)
 	app := fiber.New()
 	app.Use(New(Config{Key: "secret"}))
-	app.Get("/", func(c *fiber.Ctx) {
-		c.Send("ok")
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("ok")
 	})
 	resp, _ := app.Test(req)
 
@@ -39,8 +39,8 @@ func Test_KeyInQueryParams(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/?key=secret", nil)
 	app := fiber.New()
 	app.Use(New(Config{Key: "secret"}))
-	app.Get("/", func(c *fiber.Ctx) {
-		c.Send("ok")
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("ok")
 	})
 	resp, _ := app.Test(req)
 
@@ -55,8 +55,8 @@ func Test_KeyInHeaders(t *testing.T) {
 
 	app := fiber.New()
 	app.Use(New(Config{Key: "secret"}))
-	app.Get("/", func(c *fiber.Ctx) {
-		c.Send("ok")
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("ok")
 	})
 	resp, _ := app.Test(req)
 
@@ -76,8 +76,8 @@ func Test_CustomValidatorFunc(t *testing.T) {
 			return false
 		},
 	}))
-	app.Get("/", func(c *fiber.Ctx) {
-		c.Send("ok")
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("ok")
 	})
 	resp, _ := app.Test(req)
 

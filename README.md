@@ -6,7 +6,7 @@ Simple API key validator middleware for [Fiber](https://github.com/gofiber/fiber
 ## Install
 
 ```
-go get -u github.com/fiberweb/apikey
+go get -u github.com/fiberweb/apikey/v2
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ go get -u github.com/fiberweb/apikey
 package main
 
 import (
-  "github.com/gofiber/fiber"
+  "github.com/gofiber/fiber/v2"
   "github.com/fiberweb/apikey/v2"
 )
 
@@ -23,8 +23,8 @@ func main() {
   app := fiber.New()
   
   app.Use(apikey.New(apikey.Config{Key: "secret"}))
-  app.Get("/", func(c *fiber.Ctx) {
-    c.Send("Ok")
+  app.Get("/", func(c *fiber.Ctx) error {
+    return c.SendString("Ok")
   })
   app.Listen("8080")
 }
@@ -88,8 +88,8 @@ app.Use(apikey.New(apikey.Config{
         return cfg.Key == p.ApiKey
     }
 }))
-app.Post("/", func(c *fiber.Ctx) {
-    c.Send("Success")
+app.Post("/", func(c *fiber.Ctx) error {
+    return c.SendString("Success")
 })
 ```
 Now if you create a POST request to that endpoint with `{"api_key": "secret", "cmd": "do something"}` JSON body you'll get the success response.
