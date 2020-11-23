@@ -1,6 +1,8 @@
 # apikey
 Simple API key validator middleware for [Fiber](https://github.com/gofiber/fiber).
 
+**NOTE:** This repository only works with fiber/v2
+
 ## Install
 
 ```
@@ -14,7 +16,7 @@ package main
 
 import (
   "github.com/gofiber/fiber"
-  "github.com/fiberweb/apikey"
+  "github.com/fiberweb/apikey/v2"
 )
 
 func main() {
